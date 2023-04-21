@@ -6,12 +6,17 @@ change all S_ to wtv value
 load('Recon3E_O2Fixed.mat')
 model = modelO2Fixed
 
+% get core rxns for biomass obj
 [grRatio, grRateKO, grRateWT, hasEffect, delRxn, fluxSolution] = singleRxnDeletion(model,90);
 core1 = find(grRatio<0.5);
+
+% get core rxns for lactate obj
 model.c(find(model.c))=0;
 model.c(find(ismember(model.rxns,"EX_lac_D(e)")))=1;
 [grRatio, grRateKO, grRateWT, hasEffect, delRxn, fluxSolution] = singleRxnDeletion(model,90);
 core2 = find(grRatio<0.5);
+
+% union of both core rxns
 core = union(core1,core2)
 %%%%% saved as starthere.mat
 
