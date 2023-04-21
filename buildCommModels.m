@@ -94,7 +94,7 @@ end
 
 
 %%%%%%%%%% ABUNDANCES calculate by adding up all the nuclei parts tgt thn taking eg tumor / (cd3+tumor)
-% format: 
+% format: following microbeNames
 abundancelist = table2array(readtable("abundanceS_.csv"));
 
 for i = 1:length(commModellist)
