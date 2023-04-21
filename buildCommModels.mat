@@ -46,23 +46,23 @@ load('communityworkspace.mat', 'lbchange')
 load('communityworkspace.mat', 'excrxnchange')
 
 for i=1:str2double(extractBetween(names{end},"_00","_")) % 7 comm models
-modellist={};
-for ii=1:length(names)
-if find(contains(names(ii),['S12_00'+string(i)]))
-modelx = load(string(names(ii)) +'.mat', 'tissueModel');
-modeladd = modelx.tissueModel;
-modellist=[modellist;modeladd];
-end
-end
+	modellist={};
+	for ii=1:length(names)
+		if find(contains(names(ii),['S12_00'+string(i)]))
+		modelx = load(string(names(ii)) +'.mat', 'tissueModel');
+		modeladd = modelx.tissueModel;
+		modellist=[modellist;modeladd];
+		end
+	end
 
 for iii=1:length(modellist)
-id = find(contains(names,['S12_00'+string(i)]));
-biomasstemp = [names{id(iii)},'_biomass[c]'];
-modellist{iii,1} = addMetabolite(modellist{iii,1},biomasstemp);
-x= find(ismember(modellist{iii,1}.mets,biomasstemp));
-y= find(ismember(modellist{iii,1}.rxns,'biomass_reaction'));
-modellist{iii,1}.S(x,y)=1;
-microbeNames(i,iii) = cellstr(names(id(iii)));
+	id = find(contains(names,['S12_00'+string(i)]));
+	biomasstemp = [names{id(iii)},'_biomass[c]'];
+	modellist{iii,1} = addMetabolite(modellist{iii,1},biomasstemp);
+	x= find(ismember(modellist{iii,1}.mets,biomasstemp));
+	y= find(ismember(modellist{iii,1}.rxns,'biomass_reaction'));
+	modellist{iii,1}.S(x,y)=1;
+	microbeNames(i,iii) = cellstr(names(id(iii)));
 end
 
 commModelname = sprintf('commModel%d',i);
@@ -74,16 +74,16 @@ commModellist{i}.c(find(ismember(commModellist{i}.rxns,'communityBiomass')))=1;
 
 % remove indiv biomass and set the lb of indiv ex_biomass to 0
 for iv=1:length(modellist)
-commModellist{i}.lb(find(ismember(commModellist{i}.rxns,['EX_'+string(microbeNames{i,iv})+'_biomass[c]'])))=0;
-commModellist{i}.ub(find(ismember(commModellist{i}.rxns,['EX_'+string(microbeNames{i,iv})+'_biomass[c]'])))=0;
-commModellist{i}.lb(find(ismember(commModellist{i}.rxns,['model1_IEX_'+string(microbeNames{i,iv})+'_biomass[c]tr'])))=0;
-commModellist{i}.lb(find(ismember(commModellist{i}.rxns,['model2_IEX_'+string(microbeNames{i,iv})+'_biomass[c]tr'])))=0;
-commModellist{i}.lb(find(ismember(commModellist{i}.rxns,['model3_IEX_'+string(microbeNames{i,iv})+'_biomass[c]tr'])))=0;
+	commModellist{i}.lb(find(ismember(commModellist{i}.rxns,['EX_'+string(microbeNames{i,iv})+'_biomass[c]'])))=0;
+	commModellist{i}.ub(find(ismember(commModellist{i}.rxns,['EX_'+string(microbeNames{i,iv})+'_biomass[c]'])))=0;
+	commModellist{i}.lb(find(ismember(commModellist{i}.rxns,['model1_IEX_'+string(microbeNames{i,iv})+'_biomass[c]tr'])))=0;
+	commModellist{i}.lb(find(ismember(commModellist{i}.rxns,['model2_IEX_'+string(microbeNames{i,iv})+'_biomass[c]tr'])))=0;
+	commModellist{i}.lb(find(ismember(commModellist{i}.rxns,['model3_IEX_'+string(microbeNames{i,iv})+'_biomass[c]tr'])))=0;
 end
 commModellist{i}.lb(find(ismember(commModellist{i}.rxns,['EX_microbeBiomass[fe]'])))=0;
 
 for v=1:length(lbchange)
-commModellist{i}.lb(find(ismember(commModellist{i}.rxns,excrxnchange(v))))=lbchange(v);
+	commModellist{i}.lb(find(ismember(commModellist{i}.rxns,excrxnchange(v))))=lbchange(v);
 end
 
 commModellist{i}.c(commModellist{i}.c==1)=0;
